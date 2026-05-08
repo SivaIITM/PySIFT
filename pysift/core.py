@@ -2528,8 +2528,12 @@ class GPUPyStitch:
         -------
         keypoints    : list of cv2.KeyPoint
         descriptors  : numpy.ndarray, shape (N, 128), float32
-        image_size   : tuple (H, W) — passed to LightGlue for coord normalisation
+        image_size   : tuple (H, W) -- passed to LightGlue for coord normalisation
         """
+        if isinstance(img, str):
+            img = cv2.imread(img)
+            if img is None:
+                raise FileNotFoundError(f"Cannot read image: '{img}'")
         H, W = img.shape[:2]
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         # Change 6: GPU CLAHE via kornia — eliminates one CPU↔GPU roundtrip per image.
