@@ -46,8 +46,8 @@ all = ["kornia>=0.7", "timm>=0.9", "pyyaml"]
 pysift-stitch = "pysift.core:main"
 
 [project.urls]
-Homepage = "https://github.com/sivakumar-PySIFT/PySIFT"
-Repository = "https://github.com/sivakumar-PySIFT/PySIFT"
+Homepage = "https://github.com/SivaIITM/PySIFT"
+Repository = "https://github.com/SivaIITM/PySIFT"
 
 [tool.setuptools.packages.find]
 include = ["pysift*"]

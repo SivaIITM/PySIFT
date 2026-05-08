@@ -33,13 +33,13 @@ A pure-Python, GPU-resident SIFT implementation that matches OpenCV SIFT accurac
 ### From GitHub (private repo)
 
 ```bash
-pip install git+https://github.com/<your-username>/PySIFT.git
+pip install git+https://github.com/SivaIITM/PySIFT.git
 ```
 
 ### From source
 
 ```bash
-git clone https://github.com/<your-username>/PySIFT.git
+git clone https://github.com/SivaIITM/PySIFT.git
 cd PySIFT
 pip install -e .
 ```
