@@ -189,7 +189,7 @@ void find_extrema_fused(const float* dog, int* coords, int* count,
     if (r < border || r >= H - border || c < border || c >= W - border) return;
 
     float v = dog[idx];
-    if (fabsf(v) <= thresh) return;  // contrast gate — skips ~95% of voxels
+    if (fabsf(v) <= thresh) return;  // contrast gate -- skips ~95% of voxels
 
     bool is_max = true, is_min = true;
     for (int ds = -1; ds <= 1; ds++) {
@@ -237,7 +237,7 @@ void orientation_hist(
 
     __shared__ float sh_hist[4 * 36];
 
-    // Per-thread local histogram (deterministic — no atomicAdd)
+    // Per-thread local histogram (deterministic -- no atomicAdd)
     float local_hist[36];
     for (int b = 0; b < 36; b++) local_hist[b] = 0.0f;
 
