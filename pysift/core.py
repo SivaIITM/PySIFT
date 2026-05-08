@@ -2018,13 +2018,18 @@ class PySIFT:
         ----------
         gray : numpy.ndarray, shape (H, W), dtype uint8
         mask : ignored (kept for API compatibility with cv2 detectors)
-        profile : bool — if True, store per-phase GPU timings in self._phase_timings
+        profile : bool -- if True, store per-phase GPU timings in self._phase_timings
 
         Returns
         -------
         keypoints : list of cv2.KeyPoint
         descriptors : numpy.ndarray, shape (N, 128), dtype float32
         """
+        if isinstance(gray, str):
+            raise TypeError(
+                f"detectAndCompute expects a numpy array, got str: '{gray}'. "
+                "Load the image first: img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)"
+            )
         if profile:
             cp.cuda.runtime.deviceSynchronize()
             _t0 = time.perf_counter()
