@@ -3985,6 +3985,13 @@ class GPUPyStitch:
         else:
             images = list(args)
 
+        for i, img in enumerate(images):
+            if isinstance(img, str):
+                loaded = cv2.imread(img)
+                if loaded is None:
+                    raise FileNotFoundError(f"Cannot read image: '{img}'")
+                images[i] = loaded
+
         if len(images) == 2:
             pano, timings, metrics = self._stitch_pair(images[0], images[1])
         elif len(images) == 3:
