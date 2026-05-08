@@ -30,18 +30,39 @@ A pure-Python, GPU-resident SIFT implementation that matches OpenCV SIFT accurac
 
 ## Installation
 
-### From GitHub (private repo)
+### Prerequisites: CUDA and CuPy
+
+PySIFT requires an NVIDIA GPU with CUDA. **CuPy must be installed first**, matching your CUDA toolkit version:
 
 ```bash
-pip install git+https://github.com/SivaIITM/PySIFT.git
+# Check your CUDA version
+nvcc --version
+
+# Install CuPy for your CUDA version (pick ONE)
+pip install cupy-cuda12x   # CUDA 12.x
+pip install cupy-cuda11x   # CUDA 11.x
 ```
 
-### From source
+> **Important:** CuPy is a required runtime dependency but cannot be auto-installed by pip because the correct package name depends on your CUDA version. Install it before installing PySIFT.
+
+### Install PySIFT
 
 ```bash
+# From GitHub
+pip install git+https://github.com/SivaIITM/PySIFT.git
+
+# Or from source
 git clone https://github.com/SivaIITM/PySIFT.git
 cd PySIFT
 pip install -e .
+```
+
+### Full install (all dependencies at once)
+
+```bash
+pip install cupy-cuda12x   # or cupy-cuda11x
+pip install -r requirements.txt
+pip install git+https://github.com/SivaIITM/PySIFT.git
 ```
 
 ### Optional dependencies
@@ -56,15 +77,9 @@ pip install timm
 # YAML config file support
 pip install pyyaml
 
-# Install everything
+# Or install all optional deps at once
 pip install -e ".[all]"
 ```
-
-> **Note:** CuPy must be installed separately matching your CUDA version:
-> ```bash
-> pip install cupy-cuda12x   # CUDA 12.x
-> pip install cupy-cuda11x   # CUDA 11.x
-> ```
 
 ## Quick Start
 

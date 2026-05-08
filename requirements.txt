@@ -1,0 +1,26 @@
+# =============================================================================
+# PySIFT Requirements
+# =============================================================================
+# Install CuPy FIRST (not listed here because the package name is CUDA-version-specific):
+#
+#   pip install cupy-cuda12x   # for CUDA 12.x
+#   pip install cupy-cuda11x   # for CUDA 11.x
+#
+# Then install this file:
+#   pip install -r requirements.txt
+# =============================================================================
+
+# Core (required)
+numpy
+opencv-python>=4.5
+torch>=2.0
+numba>=0.57
+
+# Optional: learned descriptors (HardNet, HyNet, OriNet)
+kornia>=0.7
+
+# Optional: MiDaS depth estimation
+timm>=0.9
+
+# Optional: YAML config file support
+pyyaml
