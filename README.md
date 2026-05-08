@@ -70,14 +70,19 @@ pip install -r requirements.txt
 pip install git+https://github.com/SivaIITM/PySIFT.git
 ```
 
+### Recommended: depth-aware stitching
+
+PySIFT uses MiDaS monocular depth estimation to split inliers into depth bands, giving each band its own homography. This significantly improves stitching quality for scenes with foreground/background parallax. Without `timm`, stitching falls back to a single global homography.
+
+```bash
+pip install timm>=0.9
+```
+
 ### Optional dependencies
 
 ```bash
 # Learned descriptors (HardNet, HyNet, OriNet)
 pip install kornia
-
-# MiDaS depth estimation for depth-aware stitching
-pip install timm
 
 # YAML config file support
 pip install pyyaml
