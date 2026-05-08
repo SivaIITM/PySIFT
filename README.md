@@ -30,20 +30,25 @@ A pure-Python, GPU-resident SIFT implementation that matches OpenCV SIFT accurac
 
 ## Installation
 
-### Prerequisites: CUDA and CuPy
+### Prerequisites: CUDA dependencies
 
-PySIFT requires an NVIDIA GPU with CUDA. **CuPy must be installed first**, matching your CUDA toolkit version:
+PySIFT requires an NVIDIA GPU with CUDA. Two dependencies must be installed manually because they are CUDA-version-specific:
 
 ```bash
 # Check your CUDA version
 nvcc --version
 
-# Install CuPy for your CUDA version (pick ONE)
+# 1. Install CuPy (pick ONE matching your CUDA version)
 pip install cupy-cuda12x   # CUDA 12.x
 pip install cupy-cuda11x   # CUDA 11.x
+
+# 2. Install PyTorch with CUDA (default pip installs CPU-only!)
+pip install torch --index-url https://download.pytorch.org/whl/cu124   # CUDA 12.4
+pip install torch --index-url https://download.pytorch.org/whl/cu121   # CUDA 12.1
+pip install torch --index-url https://download.pytorch.org/whl/cu118   # CUDA 11.8
 ```
 
-> **Important:** CuPy is a required runtime dependency but cannot be auto-installed by pip because the correct package name depends on your CUDA version. Install it before installing PySIFT.
+> **Important:** Both CuPy and PyTorch-CUDA are required runtime dependencies but cannot be auto-installed by pip because the correct package varies by CUDA version. Install them before installing PySIFT.
 
 ### Install PySIFT
 

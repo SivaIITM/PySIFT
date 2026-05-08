@@ -1,26 +1,35 @@
 # =============================================================================
 # PySIFT Requirements
 # =============================================================================
-# Install CuPy FIRST (not listed here because the package name is CUDA-version-specific):
 #
-#   pip install cupy-cuda12x   # for CUDA 12.x
-#   pip install cupy-cuda11x   # for CUDA 11.x
+# STEP 1: Install GPU dependencies (CUDA-version-specific, not pip-auto-installable)
 #
-# Then install this file:
+#   # CuPy (pick ONE matching your CUDA version)
+#   pip install cupy-cuda12x          # CUDA 12.x
+#   pip install cupy-cuda11x          # CUDA 11.x
+#
+#   # PyTorch with CUDA (default pip installs CPU-only!)
+#   pip install torch --index-url https://download.pytorch.org/whl/cu124   # CUDA 12.4
+#   pip install torch --index-url https://download.pytorch.org/whl/cu121   # CUDA 12.1
+#   pip install torch --index-url https://download.pytorch.org/whl/cu118   # CUDA 11.8
+#
+# STEP 2: Install remaining deps
 #   pip install -r requirements.txt
+#
+# STEP 3: Install PySIFT
+#   pip install git+https://github.com/SivaIITM/PySIFT.git
 # =============================================================================
 
 # Core (required)
 numpy
 opencv-python>=4.5
-torch>=2.0
 numba>=0.57
 
 # Optional: learned descriptors (HardNet, HyNet, OriNet)
-kornia>=0.7
+# kornia>=0.7
 
 # Optional: MiDaS depth estimation
-timm>=0.9
+# timm>=0.9
 
 # Optional: YAML config file support
-pyyaml
+# pyyaml
