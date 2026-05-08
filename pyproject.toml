@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "staysift"
+version = "0.1.0"
+description = "GPU-resident SIFT with zero-copy DLPack handoff -- pure Python, OpenCV-accurate, faster end-to-end"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.9"
+authors = [
+    { name = "Sivakumar", email = "ce22s018@smail.iitm.ac.in" },
+]
+keywords = ["sift", "gpu", "cuda", "feature-extraction", "image-stitching", "computer-vision"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "numpy",
+    "opencv-python>=4.5",
+    "torch>=2.0",
+    "numba>=0.57",
+]
+
+[project.optional-dependencies]
+cuda11 = ["cupy-cuda11x"]
+cuda12 = ["cupy-cuda12x"]
+learned = ["kornia>=0.7"]
+lightglue = ["kornia>=0.7"]
+depth = ["timm>=0.9"]
+config = ["pyyaml"]
+all = ["kornia>=0.7", "timm>=0.9", "pyyaml"]
+
+[project.scripts]
+pysift-stitch = "pysift.core:main"
+
+[project.urls]
+Homepage = "https://github.com/sivakumar-PySIFT/PySIFT"
+Repository = "https://github.com/sivakumar-PySIFT/PySIFT"
+
+[tool.setuptools.packages.find]
+include = ["pysift*"]

@@ -1,0 +1,113 @@
+# =============================================================================
+# PySIFT -- Configuration File
+# =============================================================================
+# All parameters are optional. Unset keys use their built-in defaults.
+# CLI arguments override values in this file.
+#
+# Usage:
+#   pysift-stitch left.jpg right.jpg --config config.yaml
+#   pysift-stitch left.jpg right.jpg --config config.yaml --matcher lightglue
+#
+# Preset combos (uncomment the block you want):
+#
+#   CLASSIC  -- full Lowe 2004 pipeline: histogram + PySIFT + ratio test; fastest
+#   MODERN   -- histogram + sift + LightGlue; best accuracy with proven detection
+#   LEARNED  -- orinet + hardnet + LightGlue(doghardnet); fully modern pipeline
+#   MOBILE   -- classic pipeline + resize + denoise for large mobile photos
+# =============================================================================
+
+
+# -- Preprocessing ------------------------------------------------------------
+preprocessing:
+  max_dimension: 0          # MOBILE preset: 1920
+  denoise: false            # MOBILE preset: true
+  sharpen: false
+  clahe_clip: 2.0
+  clahe_tile: 8
+
+
+# -- Orientation assignment ---------------------------------------------------
+# Options: "histogram" | "orinet"
+orientation: histogram      # LEARNED preset: orinet
+
+
+# -- Descriptor computation ---------------------------------------------------
+# Options: "sift" | "hardnet" | "hynet"
+descriptor: sift            # LEARNED preset: hardnet
+
+# DSP-SIFT multi-scale descriptor pooling (Dong & Soatto, CVPR 2015).
+dsp_sift: false
+
+
+# -- Matching -----------------------------------------------------------------
+matching:
+  method: ratio             # MODERN/LEARNED preset: lightglue
+  ratio: 0.75
+  batch: 512
+  pca_dims: 64
+
+
+# -- Detection ----------------------------------------------------------------
+detection:
+  contrast_thresh: 0.04     # orinet preset: 0.02
+  edge_thresh: 10.0
+  max_keypoints: 8000
+  n_octaves: 4
+  n_scales: 3
+  sigma0: 1.6
+
+
+# -- RANSAC -------------------------------------------------------------------
+ransac:
+  method: magsac
+  sigma_max: 5.0
+  iters: 1500
+  inlier_thresh: 5.0
+
+
+# -- Depth --------------------------------------------------------------------
+depth:
+  n_layers: 4
+
+
+# -- Blending -----------------------------------------------------------------
+blending:
+  levels: 6
+  color_match: gain
+
+
+# -- Post-processing ----------------------------------------------------------
+postprocessing:
+  output_max_dim: 0
+  post_sharpen: false
+  output_format: png
+  output_quality: 90
+
+
+# =============================================================================
+# PRESET REFERENCE (copy-paste blocks)
+# =============================================================================
+#
+# CLASSIC  -- fastest
+#   orientation: histogram
+#   descriptor: sift
+#   matching: {method: ratio, pca_dims: 64}
+#   preprocessing: {max_dimension: 0}
+#
+# MODERN -- best accuracy with proven detection
+#   orientation: histogram
+#   descriptor: sift
+#   matching: {method: lightglue, pca_dims: 0}
+#
+# LEARNED -- fully modern pipeline
+#   orientation: orinet
+#   descriptor: hardnet
+#   matching: {method: lightglue, pca_dims: 0}
+#   detection: {contrast_thresh: 0.02}
+#
+# MOBILE -- classic + resize + denoise for large phone images
+#   orientation: histogram
+#   descriptor: sift
+#   matching: {method: ratio, pca_dims: 64}
+#   preprocessing: {max_dimension: 1920, denoise: true}
+# =============================================================================
