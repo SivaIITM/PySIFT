@@ -73,6 +73,8 @@ CLI:
 
 Requirements:
     Python 3.9+, PyTorch (CUDA), CuPy, Numba, OpenCV, timm (for MiDaS)
+
+Python interpreter: d:\\rebapaper\\rebapaper\\scripts\\python
 """
 
 import argparse
@@ -706,7 +708,7 @@ void sift_descriptor_coop(
     const int lane = tid % 32;
     const int warp_base = warp_id * 128;
 
-    // Zero warp-private histograms (128 threads × 4 = 512 locations)
+    // Zero warp-private histograms (128 threads x 4 = 512 locations)
     sh[tid*4 + 0] = 0.0f;
     sh[tid*4 + 1] = 0.0f;
     sh[tid*4 + 2] = 0.0f;
@@ -859,7 +861,7 @@ void sift_descriptor_dsp_coop(
     const int lane = tid % 32;
     const int warp_base = warp_id * 128;
 
-    // Zero warp-private histograms (128 threads × 4 = 512 locations)
+    // Zero warp-private histograms (128 threads x 4 = 512 locations)
     sh[tid*4 + 0] = 0.0f;
     sh[tid*4 + 1] = 0.0f;
     sh[tid*4 + 2] = 0.0f;
@@ -2018,18 +2020,13 @@ class PySIFT:
         ----------
         gray : numpy.ndarray, shape (H, W), dtype uint8
         mask : ignored (kept for API compatibility with cv2 detectors)
-        profile : bool -- if True, store per-phase GPU timings in self._phase_timings
+        profile : bool — if True, store per-phase GPU timings in self._phase_timings
 
         Returns
         -------
         keypoints : list of cv2.KeyPoint
         descriptors : numpy.ndarray, shape (N, 128), dtype float32
         """
-        if isinstance(gray, str):
-            raise TypeError(
-                f"detectAndCompute expects a numpy array, got str: '{gray}'. "
-                "Load the image first: img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)"
-            )
         if profile:
             cp.cuda.runtime.deviceSynchronize()
             _t0 = time.perf_counter()
@@ -2339,7 +2336,7 @@ def _ransac_batch_eval_graphed(all_idx_gpu, p1n_t, p2n_t, T1t, T2inv, p1h, p2h, 
             _triton_ok = False
         _ransac_graph_cache['__triton_ok'] = _triton_ok
 
-    if not _triton_ok:
+    if True:  # CUDA Graph capture of SVD is unreliable across platforms; always use direct eval
         return _ransac_batch_eval(all_idx_gpu, p1n_t, p2n_t, T1t, T2inv, p1h, p2h, p1t, p2t)
 
     if key not in _ransac_graph_cache:
@@ -2528,12 +2525,8 @@ class GPUPyStitch:
         -------
         keypoints    : list of cv2.KeyPoint
         descriptors  : numpy.ndarray, shape (N, 128), float32
-        image_size   : tuple (H, W) -- passed to LightGlue for coord normalisation
+        image_size   : tuple (H, W) — passed to LightGlue for coord normalisation
         """
-        if isinstance(img, str):
-            img = cv2.imread(img)
-            if img is None:
-                raise FileNotFoundError(f"Cannot read image: '{img}'")
         H, W = img.shape[:2]
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         # Change 6: GPU CLAHE via kornia — eliminates one CPU↔GPU roundtrip per image.
@@ -3985,13 +3978,6 @@ class GPUPyStitch:
         else:
             images = list(args)
 
-        for i, img in enumerate(images):
-            if isinstance(img, str):
-                loaded = cv2.imread(img)
-                if loaded is None:
-                    raise FileNotFoundError(f"Cannot read image: '{img}'")
-                images[i] = loaded
-
         if len(images) == 2:
             pano, timings, metrics = self._stitch_pair(images[0], images[1])
         elif len(images) == 3:
@@ -4142,8 +4128,7 @@ def _load_config(path: str) -> dict:
         return _yaml.safe_load(f) or {}
 
 
-def main():
-    """CLI entry point for pysift-stitch command."""
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="GPU-accelerated panoramic stitching — depth-aware pipeline",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -4288,7 +4273,3 @@ Examples:
 
     stitcher = GPUPyStitch(**stitcher_kwargs)
     panorama = stitcher.stitch(*images)
-
-
-if __name__ == "__main__":
-    main()
