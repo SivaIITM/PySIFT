@@ -53,7 +53,10 @@ pip install torch --index-url https://download.pytorch.org/whl/cu118   # CUDA 11
 ### Install PySIFT
 
 ```bash
-# From GitHub
+# From PyPI
+pip install staysift
+
+# Or from GitHub
 pip install git+https://github.com/SivaIITM/PySIFT.git
 
 # Or from source
@@ -96,15 +99,19 @@ pip install -e ".[all]"
 ### Python API
 
 ```python
+import cv2
 from pysift import PySIFT, GPUPyStitch
 
-# Feature extraction
+# Feature extraction (input: grayscale numpy array)
+gray = cv2.imread("image.jpg", cv2.IMREAD_GRAYSCALE)
 sift = PySIFT()
-keypoints, descriptors = sift.detectAndCompute(gray_image)
+keypoints, descriptors = sift.detectAndCompute(gray)
 
-# Panoramic stitching (2 or 3 images)
+# Panoramic stitching (input: BGR numpy arrays, not file paths)
+img1 = cv2.imread("left.jpg")
+img2 = cv2.imread("right.jpg")
 stitcher = GPUPyStitch()
-panorama = stitcher.stitch(img_left, img_right)
+panorama = stitcher.stitch(img1, img2)
 ```
 
 ### CLI
