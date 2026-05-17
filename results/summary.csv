@@ -1,0 +1,9 @@
+config,orientation,descriptor,matcher,hpatches_mma10,imc_avg_inliers,imc_pose_maa10,imc_fps,megadepth_avg_inliers,megadepth_auc10,oxford5k_map,elapsed_s
+1_opencv_baseline,histogram,sift,ratio/cpu,0.897,205.4,0.506,5.54,127.2,0.232,0.449,6630
+2_pysift_classical,histogram,dsp-sift,ratio/tc,0.919,303.0,0.517,10.74,172.4,0.288,0.524,3920
+3_pysift_orinet,orinet,dsp-sift,ratio/tc,0.897,194.2,0.464,3.42,125.6,0.253,,17431
+4_pysift_hardnet,histogram,hardnet,ratio/tc,0.892,157.1,0.387,6.11,109.9,0.189,,7800
+5_pysift_lightglue,histogram,dsp-sift,lightglue,0.921,303.0,0.517,11.09,172.3,0.286,,3104
+6_pysift_orinet_hardnet,orinet,hardnet,ratio/tc,0.913,118.6,0.377,2.86,84.5,0.171,,21230
+7_pysift_full_hybrid,orinet,hardnet,lightglue,0.571,118.7,0.378,2.87,84.6,0.172,,21469
+8_superpoint,superpoint,superpoint,lightglue,0.975,152.5,0.485,20.16,101.6,0.216,,1920

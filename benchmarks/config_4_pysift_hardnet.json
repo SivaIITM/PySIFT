@@ -1,0 +1,50 @@
+{
+  "meta": {
+    "extractor": "pysift",
+    "orientation": "histogram",
+    "descriptor": "hardnet",
+    "matcher": "ratio",
+    "fusion_mode": "fused",
+    "estimator": "magsac",
+    "matching_strategy": "gpu_bf",
+    "dsp_n_scales": 3,
+    "gpu_available": true,
+    "cuda_device": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "timestamp": "2026-05-07T06:06:17"
+  },
+  "hpatches": {
+    "native": {
+      "MMA@1px": 0.5501932904466906,
+      "MMA@3px": 0.8215996133874034,
+      "MMA@5px": 0.8719600566886987,
+      "MMA@8px": 0.8870870272129062,
+      "MMA@10px": 0.8916578022549653,
+      "Rep@3px": 0.4897259827626334,
+      "mAA@3px": 0.6724137931034483,
+      "mAA@5px": 0.746551724137931,
+      "mAA@10px": 0.8293103448275863,
+      "AvgCornerErr": 70.17572246926855,
+      "t_detect_ms": 1660.9882712075166,
+      "t_match_ms": 19.719010517643444
+    }
+  },
+  "imc": {
+    "avg_inliers": 157.0528932738235,
+    "n_pairs": 25542,
+    "pipeline_fps": 6.110003291906752,
+    "total_wall_clock_s": 4180.357813199982,
+    "pose_maa_10deg": 0.3871245643575988
+  },
+  "megadepth": {
+    "avg_inliers": 109.87437810945273,
+    "n_pairs": 804,
+    "pipeline_fps": 0.4320602936089964,
+    "total_wall_clock_s": 1860.8513948000036,
+    "auc_10deg": 0.18880597014925377,
+    "peak_vram_4k_mb": 309.10464,
+    "oom_rate_8k": 0.0
+  },
+  "oxford5k": null,
+  "dl_handoff": null,
+  "elapsed_s": 7800.417258100002
+}
