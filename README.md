@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![CUDA](https://img.shields.io/badge/CUDA-11.x%20%7C%2012.x-76B900.svg)](https://developer.nvidia.com/cuda-toolkit)
 
-A pure-Python, GPU-resident SIFT implementation that matches OpenCV SIFT accuracy while running **26% faster end-to-end** with **4x matching speedup**. Zero-copy DLPack interop keeps tensors on the GPU across the full pipeline -- no PCIe round-trips.
+A pure-Python, GPU-resident SIFT implementation that matches OpenCV SIFT accuracy while running **26% faster end-to-end** with **4x matching speedup**. Zero-copy DLPack interop keeps tensors on the GPU across the full pipeline -- no PCIe round-trips,cross device deterministic
 
 ## Architecture
 
