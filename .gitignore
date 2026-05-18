@@ -33,3 +33,4 @@ Desktop.ini
 *.png
 *.jpg
 !docs/images/*.png
+!results/*.png
