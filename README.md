@@ -7,6 +7,7 @@
 [![CUDA](https://img.shields.io/badge/CUDA-11.x%20%7C%2012.x-76B900.svg)](https://developer.nvidia.com/cuda-toolkit)
 [![arXiv](https://img.shields.io/badge/arXiv-2605.17869-b31b1b.svg)](https://arxiv.org/abs/2605.17869)
 [![Kaggle](https://img.shields.io/badge/Kaggle-Tutorial-20BEFF.svg)](https://www.kaggle.com/code/sivakumarksce24d040/pysift-tutorial)
+[![Kaggle](https://img.shields.io/badge/Kaggle-Determinism-20BEFF.svg)](https://www.kaggle.com/code/sivakumarksce24d040/pysift-determinism)
 
 A pure-Python, GPU-resident SIFT implementation that matches OpenCV SIFT accuracy while running **26% faster end-to-end** with **4x matching speedup**. Zero-copy DLPack interop keeps tensors on the GPU across the full pipeline -- no PCIe round-trips,cross device deterministic
 
