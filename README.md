@@ -5,6 +5,7 @@
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![CUDA](https://img.shields.io/badge/CUDA-11.x%20%7C%2012.x-76B900.svg)](https://developer.nvidia.com/cuda-toolkit)
+[![arXiv](https://img.shields.io/badge/arXiv-2605.17869-b31b1b.svg)](https://arxiv.org/abs/2605.17869)
 
 A pure-Python, GPU-resident SIFT implementation that matches OpenCV SIFT accuracy while running **26% faster end-to-end** with **4x matching speedup**. Zero-copy DLPack interop keeps tensors on the GPU across the full pipeline -- no PCIe round-trips,cross device deterministic
 
@@ -163,11 +164,13 @@ See [`config.yaml`](config.yaml) for all parameters and presets.
 
 ## Citation
 
+**Paper**: [arXiv:2605.17869](https://arxiv.org/abs/2605.17869)
+
 ```bibtex
 @article{sivakumar2026pysift,
   title   = {PySIFT: GPU-Resident Deterministic SIFT for Deep Learning Vision Pipelines},
   author  = {Sivakumar, K.S.},
-  journal = {arXiv preprint},
+  journal = {arXiv preprint arXiv:2605.17869},
   year    = {2026}
 }
 ```
