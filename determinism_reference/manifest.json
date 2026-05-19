@@ -1,0 +1,271 @@
+{
+  "device": "NVIDIA GeForce RTX 3050 Laptop GPU",
+  "timestamp": "2026-05-20T03:01:36",
+  "pysift_params": {
+    "n_octaves": 4,
+    "n_scales": 3,
+    "sigma0": 1.6,
+    "contrast_thresh": 0.04,
+    "edge_thresh": 10.0,
+    "dsp": true,
+    "dsp_n_scales": 5,
+    "fp16_pyramid": true,
+    "orientation": "histogram",
+    "descriptor": "sift"
+  },
+  "images": [
+    {
+      "benchmark": "hpatches",
+      "name": "i_ajuntament",
+      "file": "hpatches_i_ajuntament.npz",
+      "n_keypoints": 1026,
+      "image_shape": [
+        480,
+        640
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\i_ajuntament\\1.ppm"
+    },
+    {
+      "benchmark": "hpatches",
+      "name": "i_autannes",
+      "file": "hpatches_i_autannes.npz",
+      "n_keypoints": 3096,
+      "image_shape": [
+        870,
+        1280
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\i_autannes\\1.ppm"
+    },
+    {
+      "benchmark": "hpatches",
+      "name": "i_bologna",
+      "file": "hpatches_i_bologna.npz",
+      "n_keypoints": 286,
+      "image_shape": [
+        410,
+        640
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\i_bologna\\1.ppm"
+    },
+    {
+      "benchmark": "hpatches",
+      "name": "i_books",
+      "file": "hpatches_i_books.npz",
+      "n_keypoints": 1030,
+      "image_shape": [
+        600,
+        800
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\i_books\\1.ppm"
+    },
+    {
+      "benchmark": "hpatches",
+      "name": "i_boutique",
+      "file": "hpatches_i_boutique.npz",
+      "n_keypoints": 3939,
+      "image_shape": [
+        600,
+        800
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\i_boutique\\1.ppm"
+    },
+    {
+      "benchmark": "hpatches",
+      "name": "i_bridger",
+      "file": "hpatches_i_bridger.npz",
+      "n_keypoints": 9239,
+      "image_shape": [
+        700,
+        1280
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\i_bridger\\1.ppm"
+    },
+    {
+      "benchmark": "hpatches",
+      "name": "i_brooklyn",
+      "file": "hpatches_i_brooklyn.npz",
+      "n_keypoints": 6731,
+      "image_shape": [
+        820,
+        1280
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\i_brooklyn\\1.ppm"
+    },
+    {
+      "benchmark": "hpatches",
+      "name": "i_castle",
+      "file": "hpatches_i_castle.npz",
+      "n_keypoints": 1196,
+      "image_shape": [
+        470,
+        640
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\i_castle\\1.ppm"
+    },
+    {
+      "benchmark": "hpatches",
+      "name": "i_chestnuts",
+      "file": "hpatches_i_chestnuts.npz",
+      "n_keypoints": 2046,
+      "image_shape": [
+        600,
+        800
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\i_chestnuts\\1.ppm"
+    },
+    {
+      "benchmark": "hpatches",
+      "name": "i_contruction",
+      "file": "hpatches_i_contruction.npz",
+      "n_keypoints": 6326,
+      "image_shape": [
+        1536,
+        2048
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\i_contruction\\1.ppm"
+    },
+    {
+      "benchmark": "hpatches",
+      "name": "v_abstract",
+      "file": "hpatches_v_abstract.npz",
+      "n_keypoints": 3507,
+      "image_shape": [
+        922,
+        1229
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\v_abstract\\1.ppm"
+    },
+    {
+      "benchmark": "hpatches",
+      "name": "v_adam",
+      "file": "hpatches_v_adam.npz",
+      "n_keypoints": 565,
+      "image_shape": [
+        450,
+        600
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\v_adam\\1.ppm"
+    },
+    {
+      "benchmark": "hpatches",
+      "name": "v_apprentices",
+      "file": "hpatches_v_apprentices.npz",
+      "n_keypoints": 9814,
+      "image_shape": [
+        1331,
+        998
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\v_apprentices\\1.ppm"
+    },
+    {
+      "benchmark": "hpatches",
+      "name": "v_artisans",
+      "file": "hpatches_v_artisans.npz",
+      "n_keypoints": 9802,
+      "image_shape": [
+        759,
+        1830
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\v_artisans\\1.ppm"
+    },
+    {
+      "benchmark": "hpatches",
+      "name": "v_astronautis",
+      "file": "hpatches_v_astronautis.npz",
+      "n_keypoints": 6483,
+      "image_shape": [
+        1612,
+        735
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\v_astronautis\\1.ppm"
+    },
+    {
+      "benchmark": "hpatches",
+      "name": "v_azzola",
+      "file": "hpatches_v_azzola.npz",
+      "n_keypoints": 9718,
+      "image_shape": [
+        845,
+        1126
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\v_azzola\\1.ppm"
+    },
+    {
+      "benchmark": "hpatches",
+      "name": "v_bark",
+      "file": "hpatches_v_bark.npz",
+      "n_keypoints": 4126,
+      "image_shape": [
+        512,
+        765
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\v_bark\\1.ppm"
+    },
+    {
+      "benchmark": "hpatches",
+      "name": "v_bees",
+      "file": "hpatches_v_bees.npz",
+      "n_keypoints": 4910,
+      "image_shape": [
+        846,
+        1129
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\v_bees\\1.ppm"
+    },
+    {
+      "benchmark": "hpatches",
+      "name": "v_beyus",
+      "file": "hpatches_v_beyus.npz",
+      "n_keypoints": 2618,
+      "image_shape": [
+        1126,
+        845
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\v_beyus\\1.ppm"
+    },
+    {
+      "benchmark": "hpatches",
+      "name": "v_bip",
+      "file": "hpatches_v_bip.npz",
+      "n_keypoints": 3339,
+      "image_shape": [
+        574,
+        768
+      ],
+      "source_path": "H:\\Dataset_Stitching\\hpatches-sequences-release\\v_bip\\1.ppm"
+    },
+    {
+      "benchmark": "imc",
+      "name": "british_museum",
+      "file": "imc_british_museum.npz",
+      "n_keypoints": 4080,
+      "image_shape": [
+        783,
+        1063
+      ],
+      "source_path": "H:\\Dataset_Stitching\\imc_phototourism\\british_museum\\set_100\\images\\00350405_2611802704.jpg"
+    },
+    {
+      "benchmark": "imc",
+      "name": "florence_cathedral_side",
+      "file": "imc_florence_cathedral_side.npz",
+      "n_keypoints": 8866,
+      "image_shape": [
+        1045,
+        776
+      ],
+      "source_path": "H:\\Dataset_Stitching\\imc_phototourism\\florence_cathedral_side\\set_100\\images\\05246669_3774806731.jpg"
+    },
+    {
+      "benchmark": "imc",
+      "name": "st_pauls_cathedral",
+      "file": "imc_st_pauls_cathedral.npz",
+      "n_keypoints": 6814,
+      "image_shape": [
+        1056,
+        780
+      ],
+      "source_path": "H:\\Dataset_Stitching\\imc_phototourism\\st_pauls_cathedral\\set_100\\images\\21260922_4094863925.jpg"
+    }
+  ]
+}
