@@ -1,3 +1,4 @@
+ ![PySIFT](pysift_banner.png)
 # PySIFT
 
 **GPU-Resident Deterministic SIFT for Deep Learning Vision Pipelines**
