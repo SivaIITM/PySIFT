@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "staysift"
-version = "0.1.2"
+version = "0.1.3"
 description = "GPU-resident SIFT with zero-copy DLPack handoff -- pure Python, OpenCV-accurate, faster end-to-end"
 readme = "README.md"
 license = "MIT"

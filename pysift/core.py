@@ -1425,7 +1425,7 @@ class PySIFT:
             events[o].synchronize()
             if coord_bufs[o] is None:
                 continue
-            n_found = int(count_bufs[o].get())
+            n_found = int(count_bufs[o].item())  # v0.1.3: .item() replaces .get() for NumPy 2.x compat
             if n_found == 0:
                 continue
             n_found = min(n_found, MAX_CANDS_PER_OCTAVE)
