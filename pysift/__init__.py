@@ -1,6 +1,6 @@
 """PySIFT -- GPU-resident SIFT with zero-copy DLPack handoff."""
 
-__version__ = "0.1.0"
+__version__ = "0.1.2"
 
 from .core import PySIFT, GPUPyStitch, DepthEstimator, SmartLauncher
 
