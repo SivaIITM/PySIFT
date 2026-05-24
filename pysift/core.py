@@ -1769,7 +1769,7 @@ class PySIFT:
             refined.append(nkp)
         return refined
 
-    def _compute_descriptors(self, keypoints, gauss_pyr, pre_stacked=False):
+    def _compute_descriptors(self, keypoints, gauss_pyr, pre_stacked=False, gpu_output=False):
         """Compute 128-dimensional SIFT descriptors for all oriented keypoints.
 
         Routes to one of two backends:
@@ -1880,6 +1880,9 @@ class PySIFT:
         except NameError:
             pass
 
+        if gpu_output:
+            return sum_descs
+
         # GPU→CPU transfer with MemoryError recovery.
         # After ~10k bulk calls (e.g. Oxford5K codebook build) the Python heap can be
         # fragmented enough that numpy.empty() inside cp.asnumpy() fails for even a few
@@ -1896,7 +1899,7 @@ class PySIFT:
         del sum_descs
         return result
 
-    def _compute_descriptors_learned(self, keypoints, gauss_pyr, pre_stacked=False):
+    def _compute_descriptors_learned(self, keypoints, gauss_pyr, pre_stacked=False, gpu_output=False):
         """v2.1 — Compute 128-dim descriptors using HardNet8 or HyNet.
 
         Extracts a 32×32 patch from the Gaussian pyramid at each keypoint's
@@ -2010,9 +2013,12 @@ class PySIFT:
             desc_chunks.append(descs_b.cpu())
             del batch, thetas
 
-        return torch.cat(desc_chunks, dim=0).numpy().astype(np.float32)
+        combined = torch.cat(desc_chunks, dim=0)
+        if gpu_output:
+            return cp.asarray(combined.float().cuda())
+        return combined.numpy().astype(np.float32)
 
-    def detectAndCompute(self, gray, mask=None, profile=False):
+    def detectAndCompute(self, gray, mask=None, profile=False, gpu_output=False):
         """
         Detect keypoints and compute descriptors for a grayscale image.
 
@@ -2021,11 +2027,15 @@ class PySIFT:
         gray : numpy.ndarray, shape (H, W), dtype uint8
         mask : ignored (kept for API compatibility with cv2 detectors)
         profile : bool — if True, store per-phase GPU timings in self._phase_timings
+        gpu_output : bool — if True, return GPU-resident CuPy arrays:
+            keypoints as (N, 4) [x, y, size, angle], descriptors as (N, 128).
 
         Returns
         -------
-        keypoints : list of cv2.KeyPoint
-        descriptors : numpy.ndarray, shape (N, 128), dtype float32
+        keypoints : list of cv2.KeyPoint  (gpu_output=False)
+                    cp.ndarray (N, 4)      (gpu_output=True)
+        descriptors : numpy.ndarray (N, 128)  (gpu_output=False)
+                      cp.ndarray (N, 128)     (gpu_output=True)
         """
         if profile:
             cp.cuda.runtime.deviceSynchronize()
@@ -2088,10 +2098,10 @@ class PySIFT:
             cp.get_default_memory_pool().free_all_blocks()
             cp.get_default_pinned_memory_pool().free_all_blocks()
             descs = self._compute_descriptors_learned(oriented, gauss_stacked,
-                                                      pre_stacked=True)
+                                                      pre_stacked=True, gpu_output=gpu_output)
         else:
             descs = self._compute_descriptors(oriented, gauss_stacked,
-                                              pre_stacked=True)
+                                              pre_stacked=True, gpu_output=gpu_output)
         if profile:
             cp.cuda.runtime.deviceSynchronize()
             _t_desc = time.perf_counter()
@@ -2122,12 +2132,20 @@ class PySIFT:
             _sz, _ag = _sz[_order], _ag[_order]
             _rs, _oc = _rs[_order], _oc[_order]
             descs = descs[_order]
-            cv_kpts = [cv2.KeyPoint(float(_xs[_j]), float(_ys[_j]),
-                                    float(_sz[_j]), float(_ag[_j]),
-                                    float(_rs[_j]), int(_oc[_j]))
-                       for _j in range(_n)]
+            if gpu_output:
+                _kp_np = np.column_stack((_xs, _ys, _sz, _ag))
+                cv_kpts = cp.asarray(_kp_np)
+            else:
+                cv_kpts = [cv2.KeyPoint(float(_xs[_j]), float(_ys[_j]),
+                                        float(_sz[_j]), float(_ag[_j]),
+                                        float(_rs[_j]), int(_oc[_j]))
+                           for _j in range(_n)]
         else:
-            cv_kpts = []
+            if gpu_output:
+                cv_kpts = cp.empty((0, 4), dtype=cp.float32)
+                descs = cp.empty((0, 128), dtype=cp.float32)
+            else:
+                cv_kpts = []
         if profile:
             _t_cvkpt = time.perf_counter()
             self._phase_timings = {
