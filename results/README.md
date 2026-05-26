@@ -1,4 +1,4 @@
-# Pre-computed Results
+# Pre-computed Results of PySIFT
 
 Aggregate benchmark metrics from PySIFT evaluation. These reproduce the paper's claims without requiring dataset downloads or GPU compute.
 
@@ -11,7 +11,7 @@ Aggregate benchmark metrics from PySIFT evaluation. These reproduce the paper's 
 | `fig_pareto_ablation.pdf` | Vector version for print/slides |
 | `../determinism_reference/` | Bitwise-reproducible keypoint/descriptor dumps for verification |
 
-## Pareto Plot
+## Pareto Plot showing results of PySIFT
 
 <p align="center">
   <img src="fig_pareto_ablation.png" alt="Pareto: Speed vs Accuracy" width="800"/>
