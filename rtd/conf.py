@@ -11,7 +11,7 @@ extensions = [
 
 html_theme = "furo"
 html_title = "PySIFT Documentation"
-html_baseurl = "https://pysift.readthedocs.io/en/latest/"
+html_baseurl = "https://pysift-gpu.readthedocs.io/en/latest/"
 
 html_theme_options = {
     "source_repository": "https://github.com/SivaIITM/PySIFT",
@@ -24,7 +24,7 @@ html_theme_options = {
 }
 
 # OpenGraph meta
-ogp_site_url = "https://pysift.readthedocs.io/en/latest/"
+ogp_site_url = "https://pysift-gpu.readthedocs.io/en/latest/"
 ogp_site_name = "PySIFT Documentation"
 ogp_description_length = 200
 
@@ -32,3 +32,4 @@ ogp_description_length = 200
 sitemap_url_scheme = "{link}"
 
 exclude_patterns = ["_build"]
+html_extra_path = ['google9628e3969b6b9597.html']
