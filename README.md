@@ -1,7 +1,7 @@
  ![PySIFT](pysift_banner.png)
 # PySIFT
 
-**GPU-Resident Deterministic SIFT for Deep Learning Vision Pipelines**
+**GPU-Resident Deterministic SIFT for Deep Learning Vision Pipelines - PySIFT**
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -19,7 +19,7 @@ A pure-Python, GPU-resident SIFT implementation that matches OpenCV SIFT accurac
   <img src="docs/images/fig_architecture.png" alt="PySIFT Architecture" width="800"/>
 </p>
 
-## Key Features
+## Key Features of PySIFT
 
 - **GPU-resident pipeline** -- Detection, description, matching, RANSAC, and blending all execute on the GPU via CuPy + Numba CUDA kernels
 - **Zero-copy DLPack handoff** -- CuPy arrays pass to PyTorch tensors without memory copies, enabling seamless integration with deep learning pipelines
@@ -27,13 +27,13 @@ A pure-Python, GPU-resident SIFT implementation that matches OpenCV SIFT accurac
 - **Modular descriptor/matcher backends** -- Swap in HardNet, HyNet (learned descriptors) or LightGlue (learned matching) with a single config flag
 - **Deterministic** -- Bitwise reproducible results via warp-shuffle reductions (no atomicAdd non-determinism)
 
-## Qualitative Results
+## Qualitative Results of PySIFT
 
 <p align="center">
   <img src="docs/images/fig_qualitative.png" alt="Stitching Results" width="800"/>
 </p>
 
-## Installation
+## Installation of PySIFT
 
 ### Prerequisites: CUDA dependencies
 
