@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PySIFT - GPU-Resident SIFT for Computer Vision | Feature Extraction for Medical Imaging, Drones, SLAM</title>
+    <meta name="description" content="PySIFT is a pure-Python, open-source GPU-resident implementation of SIFT built on CuPy and Numba CUDA kernels -- faster and yet more accurate. Zero-copy DLPack interop to PyTorch frees your downstream DL steps from CPU PCIe bottlenecks. For medical imaging, drone stitching, SLAM, robotics, and 3D reconstruction.">
+    <meta name="keywords" content="PySIFT, GPU SIFT, SIFT feature extraction, computer vision keypoints, Scale-Invariant Feature Transform, image matching GPU, medical image registration, drone image stitching, visual SLAM features, robotics vision, NeRF preprocessing, 3D Gaussian Splatting, satellite image matching, CuPy, PyTorch, DLPack, zero-copy GPU">
+    <meta name="author" content="Sivakumar K.S., IIT Madras">
+    <link rel="canonical" href="https://sivaiitm.github.io/PySIFT/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="PySIFT - GPU-Resident SIFT for Computer Vision">
+    <meta property="og:description" content="PySIFT: pure-Python GPU-resident SIFT built on CuPy and Numba CUDA kernels -- faster and yet more accurate. Zero-copy DLPack to PyTorch frees your downstream DL from CPU PCIe bottlenecks.">
+    <meta property="og:url" content="https://sivaiitm.github.io/PySIFT/">
+    <meta property="og:image" content="https://sivaiitm.github.io/PySIFT/images/og_card.png">
+    <meta property="og:site_name" content="PySIFT">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PySIFT - GPU-Resident SIFT for Computer Vision">
+    <meta name="twitter:description" content="PySIFT: pure-Python GPU-resident SIFT -- faster and yet more accurate. Zero-copy DLPack to PyTorch frees downstream DL from CPU PCIe bottlenecks.">
+    <meta name="twitter:image" content="https://sivaiitm.github.io/PySIFT/images/og_card.png">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "PySIFT",
+        "alternateName": "staysift",
+        "description": "GPU-resident deterministic SIFT feature extraction for deep learning vision pipelines. Pure Python implementation using CuPy and Numba CUDA kernels with zero-copy DLPack interop to PyTorch.",
+        "url": "https://github.com/SivaIITM/PySIFT",
+        "codeRepository": "https://github.com/SivaIITM/PySIFT",
+        "programmingLanguage": ["Python", "CUDA"],
+        "runtimePlatform": "NVIDIA GPU with CUDA 11.x or 12.x",
+        "license": "https://opensource.org/licenses/MIT",
+        "author": {
+            "@type": "Person",
+            "name": "Sivakumar K.S.",
+            "affiliation": {
+                "@type": "EducationalOrganization",
+                "name": "IIT Madras"
+            }
+        },
+        "applicationCategory": "Computer Vision",
+        "operatingSystem": "Windows, Linux",
+        "softwareRequirements": "Python 3.9+, NVIDIA GPU, CUDA 11.x/12.x",
+        "keywords": "SIFT, GPU, feature extraction, computer vision, image matching, keypoints, DLPack, PyTorch, CuPy, medical imaging, drone stitching, SLAM, robotics, 3D reconstruction"
+    }
+    </script>
+
+    <!-- Scholarly Article Reference -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ScholarlyArticle",
+        "name": "PySIFT: GPU-Resident Deterministic SIFT for Deep Learning Vision Pipelines",
+        "author": {"@type": "Person", "name": "Sivakumar K.S."},
+        "url": "https://arxiv.org/abs/2605.17869",
+        "sameAs": "https://arxiv.org/abs/2605.17869",
+        "datePublished": "2026-05-19",
+        "publisher": {"@type": "Organization", "name": "arXiv"}
+    }
+    </script>
+
+    <style>
+        :root {
+            --primary: #2ecc71;
+            --primary-dark: #27ae60;
+            --accent: #1abc9c;
+            --bg: #ffffff;
+            --text: #1a1a1a;
+            --text-light: #6b7280;
+            --code-bg: #1e1e2e;
+            --code-text: #cdd6f4;
+            --code-keyword: #cba6f7;
+            --code-string: #a6e3a1;
+            --code-comment: #6c7086;
+            --border: #e5e7eb;
+            --card-bg: #f9fafb;
+            --arxiv: #b31b1b;
+            --kaggle: #20BEFF;
+            --pypi: #3775a9;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            color: var(--text); line-height: 1.65;
+            max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem;
+            background: var(--bg);
+        }
+
+        /* ---- Header ---- */
+        .header { text-align: center; margin-bottom: 1.5rem; }
+        .header h1 { font-size: 2.4rem; letter-spacing: -0.02em; }
+        .header h1 span { color: var(--primary-dark); }
+        .header .subtitle {
+            color: var(--text-light); font-size: 1.05rem;
+            max-width: 640px; margin: 0.5rem auto 0;
+        }
+
+        /* ---- Badges ---- */
+        .badges {
+            display: flex; gap: 8px; justify-content: center;
+            flex-wrap: wrap; margin: 1.2rem 0 1.5rem;
+        }
+        .badges a {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 16px; color: white; text-decoration: none;
+            border-radius: 6px; font-weight: 600; font-size: 0.82rem;
+            transition: opacity 0.2s;
+        }
+        .badges a:hover { opacity: 0.85; }
+
+        /* ---- Install banner ---- */
+        .install-banner {
+            text-align: center; margin: 0 0 1.5rem;
+            padding: 1rem; background: var(--code-bg); border-radius: 8px;
+        }
+        .install-banner code {
+            color: var(--code-text); font-size: 1.1rem;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', Menlo, monospace;
+        }
+
+        /* ---- Tabs ---- */
+        .tabs {
+            display: flex; gap: 0; border-bottom: 2px solid var(--border);
+            margin-bottom: 2rem; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;
+        }
+        .tab-btn {
+            padding: 12px 18px; border: none; background: none;
+            font-size: 0.88rem; font-weight: 500; color: var(--text-light);
+            cursor: pointer; border-bottom: 2px solid transparent;
+            margin-bottom: -2px; white-space: nowrap; transition: all 0.2s;
+            font-family: inherit;
+        }
+        .tab-btn:hover { color: var(--text); }
+        .tab-btn.active {
+            color: var(--primary-dark); border-bottom-color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* ---- Content ---- */
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+        h2 { font-size: 1.45rem; margin: 2rem 0 0.8rem; }
+        h2:first-child { margin-top: 0; }
+        h3 { font-size: 1.1rem; margin: 1.4rem 0 0.5rem; }
+        p { margin-bottom: 1rem; }
+        ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+        li { margin-bottom: 0.35rem; }
+
+        /* ---- Code ---- */
+        pre {
+            background: var(--code-bg); color: var(--code-text);
+            padding: 1rem 1.2rem; border-radius: 8px;
+            overflow-x: auto; font-size: 0.85rem; margin: 1rem 0;
+            line-height: 1.55; position: relative;
+        }
+        pre .label {
+            position: absolute; top: 6px; right: 10px;
+            font-size: 0.7rem; color: var(--code-comment);
+            text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        code {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code',
+                         'SF Mono', Menlo, monospace;
+        }
+        p code, li code {
+            background: #f0f0f0; padding: 2px 6px; border-radius: 4px;
+            font-size: 0.85rem; color: #d63384;
+        }
+        .kw { color: var(--code-keyword); }
+        .st { color: var(--code-string); }
+        .cm { color: var(--code-comment); font-style: italic; }
+        .fn { color: #89b4fa; }
+        .nb { color: #fab387; }
+
+        /* ---- Tables ---- */
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+        th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: var(--card-bg); font-weight: 600; }
+        .win { color: var(--primary-dark); font-weight: 600; }
+
+        /* ---- Cards ---- */
+        .card {
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 10px; padding: 1.2rem; margin: 1rem 0;
+        }
+        .card h3 { margin-top: 0; }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem; margin: 1rem 0;
+        }
+
+        /* ---- Use-case cards ---- */
+        .usecase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem; margin: 1.5rem 0;
+        }
+        .usecase-card {
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 10px; padding: 1.4rem; transition: box-shadow 0.2s;
+        }
+        .usecase-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .usecase-card .icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
+        .usecase-card h3 { margin: 0 0 0.5rem; font-size: 1.05rem; }
+        .usecase-card p { font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.6rem; }
+        .usecase-card .keywords { font-size: 0.75rem; color: var(--primary-dark); font-weight: 500; }
+
+        /* ---- Pipeline ---- */
+        .pipeline {
+            display: flex; flex-wrap: wrap; gap: 6px;
+            align-items: center; justify-content: center;
+            margin: 1.5rem 0; padding: 1rem;
+        }
+        .stage {
+            background: var(--primary); color: white;
+            padding: 10px 14px; border-radius: 8px;
+            font-weight: 600; font-size: 0.82rem; text-align: center;
+            min-width: 100px;
+        }
+        .stage.cpu { background: #6c7086; }
+        .arrow { color: var(--text-light); font-size: 1.1rem; font-weight: bold; }
+
+        /* ---- Images ---- */
+        .img-box {
+            text-align: center; margin: 1.5rem 0;
+            background: var(--card-bg); border-radius: 10px;
+            padding: 1rem; border: 1px solid var(--border);
+        }
+        .img-box img { max-width: 100%; border-radius: 6px; }
+        .img-box .caption {
+            color: var(--text-light); font-size: 0.82rem; margin-top: 0.5rem;
+        }
+
+        /* ---- Highlight ---- */
+        .tip {
+            background: #f0fdf4; border-left: 4px solid var(--primary);
+            padding: 0.8rem 1.2rem; border-radius: 0 8px 8px 0; margin: 1rem 0;
+        }
+        .tip strong { color: var(--primary-dark); }
+        .warn {
+            background: #fefce8; border-left: 4px solid #eab308;
+            padding: 0.8rem 1.2rem; border-radius: 0 8px 8px 0; margin: 1rem 0;
+        }
+
+        /* ---- Footer ---- */
+        .footer {
+            margin-top: 3rem; padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            text-align: center; color: var(--text-light); font-size: 0.82rem;
+        }
+        .footer a { color: var(--primary-dark); text-decoration: none; }
+        .footer .links { margin-top: 0.5rem; }
+        .footer .links a { margin: 0 8px; }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 640px) {
+            body { padding: 1rem; }
+            .header h1 { font-size: 1.8rem; }
+            .tab-btn { padding: 10px 10px; font-size: 0.78rem; }
+            .pipeline { flex-direction: column; }
+            .arrow { transform: rotate(90deg); }
+            .features { grid-template-columns: 1fr; }
+            .usecase-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<div class="header">
+    <h1>Py<span>SIFT</span></h1>
+    <p class="subtitle">
+        A pure-Python, open-source GPU-resident implementation of SIFT
+        built on CuPy and Numba CUDA kernels &mdash; faster and yet more accurate.
+        Zero-copy DLPack interop to PyTorch frees your downstream DL steps from CPU PCIe bottlenecks.
+    </p>
+</div>
+
+<div class="badges">
+    <a href="https://arxiv.org/abs/2605.17869" target="_blank" rel="noopener" style="background:var(--arxiv)">arXiv Paper</a>
+    <a href="https://github.com/SivaIITM/PySIFT" target="_blank" rel="noopener" style="background:#333">GitHub</a>
+    <a href="https://pypi.org/project/staysift/" target="_blank" rel="noopener" style="background:var(--pypi)">PyPI</a>
+    <a href="https://pysift.readthedocs.io/" target="_blank" rel="noopener" style="background:#555">Docs</a>
+    <a href="https://www.kaggle.com/competitions/imc-2026-warm-up-landmark-matching-sprint" target="_blank" rel="noopener" style="background:var(--kaggle)">Kaggle</a>
+    <a href="https://huggingface.co/spaces/sivaIITM/PySIFT" target="_blank" rel="noopener" style="background:#ff9d00;color:#000">HF Space</a>
+</div>
+
+<div class="install-banner">
+    <code>pip install staysift</code>
+</div>
+
+<!-- ============ TABS ============ -->
+<div class="tabs">
+    <button class="tab-btn active" data-tab="overview">Overview</button>
+    <button class="tab-btn" data-tab="pipeline">GPU Pipeline</button>
+    <button class="tab-btn" data-tab="detection">Detection</button>
+    <button class="tab-btn" data-tab="matching">Matching</button>
+    <button class="tab-btn" data-tab="dsp">DSP-SIFT</button>
+    <button class="tab-btn" data-tab="usecases">Use Cases</button>
+    <button class="tab-btn" data-tab="tryit">Try It</button>
+</div>
+
+<!-- ============ TAB 1: OVERVIEW ============ -->
+<div id="overview" class="tab-content active">
+    <h2>What is PySIFT?</h2>
+    <p>
+        <strong>PySIFT</strong> is a pure-Python, open-source GPU-resident implementation of the
+        Scale-Invariant Feature Transform (SIFT) built on CuPy and Numba CUDA kernels which is
+        faster and yet more accurate. It runs the entire detection-to-descriptor pipeline on your
+        NVIDIA GPU with zero-copy DLPack interop to PyTorch so that your downstream DL steps
+        will be free from CPU PCIe bottlenecks.
+    </p>
+    <p>
+        Unlike OpenCV's SIFT (compiled C++ running on CPU), PySIFT keeps tensors in VRAM from
+        the moment you load the image until your downstream pipeline (matching, RANSAC,
+        bundle adjustment, rendering) consumes it. For pipelines in medical imaging,
+        drone stitching, SLAM, robotics, and 3D reconstruction, this eliminates the bottleneck that
+        makes CPU-based SIFT a liability.
+    </p>
+
+    <div class="features">
+        <div class="card">
+            <h3>GPU-Resident</h3>
+            <p>All 5 pipeline stages run on GPU. Descriptors stay in VRAM &mdash;
+            no CPU round-trips. Zero-copy handoff to PyTorch, CuPy, or any DLPack consumer.</p>
+        </div>
+        <div class="card">
+            <h3>Deterministic</h3>
+            <p>Bitwise-identical output across runs. No non-deterministic CUDA ops.
+            Warp-shuffle reductions replace atomicAdd for reproducibility.</p>
+        </div>
+        <div class="card">
+            <h3>Drop-in Compatible</h3>
+            <p>Returns <code>cv2.KeyPoint</code> objects and NumPy descriptors by default.
+            Swap <code>cv2.SIFT_create()</code> for <code>PySIFT()</code> &mdash; everything else stays the same.</p>
+        </div>
+    </div>
+
+    <h2>Benchmark Results</h2>
+    <p>Tested against OpenCV SIFT on 4 standard benchmarks (RTX 3050 Laptop GPU, 4 GB VRAM):</p>
+    <table>
+        <tr><th>Benchmark</th><th>Metric</th><th>PySIFT</th><th>OpenCV</th><th>Delta</th></tr>
+        <tr><td>HPatches</td><td>MMA@10</td><td class="win">0.703</td><td>0.681</td><td class="win">+2.2pp</td></tr>
+        <tr><td>IMC Phototourism</td><td>Inliers/pair</td><td class="win">303</td><td>205</td><td class="win">+47%</td></tr>
+        <tr><td>MegaDepth-1500</td><td>AUC@10</td><td class="win">0.503</td><td>0.447</td><td class="win">+5.6pp</td></tr>
+        <tr><td>ROxford5K</td><td>mAP (Medium)</td><td class="win">0.455</td><td>0.380</td><td class="win">+7.5pp</td></tr>
+    </table>
+
+    <h2>Speed</h2>
+    <table>
+        <tr><th>Stage</th><th>PySIFT (GPU)</th><th>OpenCV (CPU)</th><th>Speedup</th></tr>
+        <tr><td>Detection + Description</td><td>88 ms</td><td>111 ms</td><td class="win">1.26x</td></tr>
+        <tr><td>BF Matching (1000 kp)</td><td>2.1 ms</td><td>8.4 ms</td><td class="win">4.0x</td></tr>
+        <tr><td>End-to-End (2 images)</td><td>178 ms</td><td>241 ms</td><td class="win">1.35x</td></tr>
+    </table>
+
+    <h2>Quick Install</h2>
+    <pre><code><span class="cm"># 1. Install CUDA dependencies (order matters)</span>
+pip install cupy-cuda12x
+pip install torch --index-url https://download.pytorch.org/whl/cu124
+
+<span class="cm"># 2. Install PySIFT</span>
+pip install staysift</code></pre>
+</div>
+
+<!-- ============ TAB 2: PIPELINE ============ -->
+<div id="pipeline" class="tab-content">
+    <h2>The 5-Stage GPU Pipeline</h2>
+    <p>
+        PySIFT implements Lowe's SIFT algorithm (IJCV 2004) entirely on the GPU.
+        Every stage &mdash; from image preprocessing to descriptor output &mdash; executes
+        as CUDA kernels via CuPy and Numba. The image never leaves VRAM.
+    </p>
+
+    <div class="pipeline">
+        <div class="stage">1. CLAHE<br><small>Preprocessing</small></div>
+        <span class="arrow">&rarr;</span>
+        <div class="stage">2. Gaussian<br><small>Pyramid</small></div>
+        <span class="arrow">&rarr;</span>
+        <div class="stage">3. DoG<br><small>Extrema</small></div>
+        <span class="arrow">&rarr;</span>
+        <div class="stage">4. Orientation<br><small>Assignment</small></div>
+        <span class="arrow">&rarr;</span>
+        <div class="stage">5. Descriptor<br><small>Computation</small></div>
+    </div>
+
+    <h3>Stage 1: CLAHE Preprocessing</h3>
+    <p>
+        Adaptive histogram equalization (CLAHE) normalizes local contrast before
+        building the scale-space pyramid. This yields 40-80% more usable keypoints
+        on night, haze, and low-contrast images vs. raw input &mdash; critical for
+        drone imagery at dawn/dusk and medical scans with uneven illumination.
+    </p>
+
+    <h3>Stage 2: Gaussian Scale-Space Pyramid</h3>
+    <p>
+        The image is progressively blurred and downsampled across octaves. PySIFT
+        supports <code>fp16_pyramid=True</code> for half-precision storage (2x memory savings
+        on VRAM-constrained GPUs like Jetson or RTX 3050), with full fp32 precision during
+        DoG subtraction to avoid catastrophic cancellation.
+    </p>
+
+    <h3>Stage 3: DoG Extrema Detection</h3>
+    <p>
+        Difference-of-Gaussians (DoG) volumes are computed by subtracting adjacent
+        Gaussian levels. Local extrema in 3D (x, y, scale) are candidate keypoints.
+        Sub-pixel refinement via Taylor expansion and edge-response rejection
+        (Hessian ratio test) filter the candidates.
+    </p>
+
+    <h3>Stage 4: Orientation Assignment</h3>
+    <p>
+        A gradient orientation histogram (36 bins) around each keypoint determines
+        its dominant orientation, making descriptors rotation-invariant.
+        PySIFT also supports learned orientation via OriNet
+        (<code>orientation='orinet'</code>).
+    </p>
+
+    <h3>Stage 5: Descriptor Computation</h3>
+    <p>
+        A 128-dimensional histogram of oriented gradients over a 16x16 patch
+        (4x4 spatial bins, 8 orientation bins). PySIFT applies RootSIFT normalization
+        by default (L1 + sqrt), which improves matching over raw L2-normalized SIFT.
+        With <code>dsp=True</code>, multi-scale descriptor pooling further boosts robustness.
+    </p>
+
+    <div class="tip">
+        <strong>Zero-copy output:</strong> Use <code>gpu_output=True</code> to keep keypoints
+        and descriptors as CuPy arrays in VRAM. Pass directly to GPU-based matchers
+        without any PCIe transfer.
+    </div>
+
+    <h2>GPU-Residency: Why It Matters</h2>
+    <p>
+        In a typical vision pipeline (detect &rarr; match &rarr; estimate &rarr; reconstruct),
+        CPU-based SIFT forces a GPU&rarr;CPU&rarr;GPU round-trip at every stage boundary.
+        PySIFT eliminates this overhead entirely:
+    </p>
+    <table>
+        <tr><th>Pipeline</th><th>PCIe Transfers</th><th>GPU Idle Time</th></tr>
+        <tr><td>OpenCV SIFT + PyTorch</td><td>4 per image pair</td><td>~40% of pipeline</td></tr>
+        <tr><td>PySIFT + CuPy matching</td><td class="win">0 (until final output)</td><td class="win">&lt;5%</td></tr>
+    </table>
+</div>
+
+<!-- ============ TAB 3: DETECTION ============ -->
+<div id="detection" class="tab-content">
+    <h2>Keypoint Detection</h2>
+    <p>
+        PySIFT detects scale-invariant keypoints across a Gaussian pyramid.
+        The default configuration (4 octaves, 3 scales per octave, contrast threshold 0.04)
+        closely matches OpenCV SIFT's behavior while running entirely on the GPU.
+    </p>
+
+    <div class="img-box">
+        <img src="images/fig_qualitative.png" alt="PySIFT keypoint detection and matching on landmark images"
+             onerror="this.parentElement.innerHTML='<div style=&quot;padding:3rem;color:#6b7280&quot;>Image not available</div>'">
+        <div class="caption">PySIFT feature matching on landmark images. Green = PySIFT inliers, Red = OpenCV inliers.</div>
+    </div>
+
+    <h3>Basic Usage</h3>
+    <pre><code><span class="kw">from</span> pysift <span class="kw">import</span> PySIFT
+<span class="kw">import</span> cv2
+
+sift = PySIFT()
+gray = cv2.<span class="fn">imread</span>(<span class="st">"image.jpg"</span>, cv2.IMREAD_GRAYSCALE)
+
+<span class="cm"># Returns OpenCV-compatible KeyPoints + NumPy descriptors</span>
+keypoints, descriptors = sift.<span class="fn">detectAndCompute</span>(gray, <span class="nb">None</span>)
+<span class="fn">print</span>(<span class="st">f"Detected </span>{len(keypoints)}<span class="st"> keypoints"</span>)
+<span class="fn">print</span>(<span class="st">f"Descriptor shape: </span>{descriptors.shape}<span class="st">"</span>)  <span class="cm"># (N, 128)</span></code></pre>
+
+    <h3>GPU-Resident Output</h3>
+    <pre><code><span class="cm"># Keep everything on GPU as CuPy arrays</span>
+kp_gpu, desc_gpu = sift.<span class="fn">detectAndCompute</span>(gray, <span class="nb">None</span>, gpu_output=<span class="nb">True</span>)
+<span class="cm"># kp_gpu: CuPy (N, 4) -- [x, y, size, angle]</span>
+<span class="cm"># desc_gpu: CuPy (N, 128) -- ready for GPU matching</span></code></pre>
+
+    <h3>Tunable Parameters</h3>
+    <table>
+        <tr><th>Parameter</th><th>Default</th><th>Effect</th></tr>
+        <tr><td><code>n_octaves</code></td><td>4</td><td>More octaves = more scale coverage, more keypoints</td></tr>
+        <tr><td><code>n_scales</code></td><td>3</td><td>Scale levels per octave (S in Lowe 2004)</td></tr>
+        <tr><td><code>contrast_thresh</code></td><td>0.04</td><td>Lower = more keypoints on low-contrast regions</td></tr>
+        <tr><td><code>edge_thresh</code></td><td>10.0</td><td>Higher = keep more edge-like keypoints</td></tr>
+        <tr><td><code>double_image</code></td><td>True</td><td>2x upsample (octave -1), matches OpenCV default</td></tr>
+        <tr><td><code>rootsift</code></td><td>True</td><td>L1+sqrt normalization (improves matching)</td></tr>
+    </table>
+
+    <div class="tip">
+        <strong>Adaptive contrast:</strong> PySIFT automatically adjusts
+        <code>contrast_thresh</code> based on image statistics (night scenes get lower thresholds).
+        You can override this by setting the parameter explicitly.
+    </div>
+</div>
+
+<!-- ============ TAB 4: MATCHING ============ -->
+<div id="matching" class="tab-content">
+    <h2>Feature Matching</h2>
+    <p>
+        PySIFT descriptors are L2-compatible (or RootSIFT by default), so any
+        standard matcher works. For best results, combine Lowe's ratio test with
+        mutual nearest-neighbor (MNN) filtering.
+    </p>
+
+    <h3>CPU Matching (OpenCV BFMatcher)</h3>
+    <pre><code>bf = cv2.<span class="fn">BFMatcher</span>(cv2.NORM_L2)
+raw = bf.<span class="fn">knnMatch</span>(desc_a, desc_b, k=<span class="nb">2</span>)
+
+<span class="cm"># Lowe's ratio test</span>
+good = [m <span class="kw">for</span> m, n <span class="kw">in</span> raw <span class="kw">if</span> m.distance &lt; <span class="nb">0.85</span> * n.distance]</code></pre>
+
+    <h3>GPU Matching (Zero PCIe Transfer)</h3>
+    <p>
+        When using <code>gpu_output=True</code>, descriptors are CuPy arrays in VRAM.
+        Match entirely on GPU using matmul-based brute-force:
+    </p>
+    <pre><code><span class="kw">import</span> cupy <span class="kw">as</span> cp
+
+<span class="kw">def</span> <span class="fn">gpu_bf_match_mutual</span>(desc_a, desc_b, ratio=<span class="nb">0.85</span>):
+    <span class="cm">"""Mutual nearest-neighbor matching on GPU."""</span>
+    ratio_sq = ratio * ratio
+
+    <span class="cm"># L2 distance matrix via matmul</span>
+    a_sq = cp.<span class="fn">sum</span>(desc_a * desc_a, axis=<span class="nb">1</span>, keepdims=<span class="nb">True</span>)
+    b_sq = cp.<span class="fn">sum</span>(desc_b * desc_b, axis=<span class="nb">1</span>, keepdims=<span class="nb">True</span>).T
+    dist_sq = a_sq + b_sq - <span class="nb">2.0</span> * cp.<span class="fn">matmul</span>(desc_a, desc_b.T)
+    cp.<span class="fn">maximum</span>(dist_sq, <span class="nb">0.0</span>, out=dist_sq)
+
+    <span class="cm"># Forward: Lowe's ratio test (A -> B)</span>
+    top2 = cp.<span class="fn">argpartition</span>(dist_sq, <span class="nb">1</span>, axis=<span class="nb">1</span>)[:, :<span class="nb">2</span>]
+    rows = cp.<span class="fn">arange</span>(dist_sq.shape[<span class="nb">0</span>])
+    d0 = dist_sq[rows, top2[:, <span class="nb">0</span>]]
+    d1 = dist_sq[rows, top2[:, <span class="nb">1</span>]]
+    swap = d0 > d1
+    best_f = cp.<span class="fn">where</span>(swap, top2[:, <span class="nb">1</span>], top2[:, <span class="nb">0</span>])
+    d_best = cp.<span class="fn">where</span>(swap, d1, d0)
+    d_second = cp.<span class="fn">where</span>(swap, d0, d1)
+    pass_ratio = (d_best &lt; ratio_sq * d_second) &amp; (d_second > <span class="nb">0</span>)
+
+    <span class="cm"># Backward: nearest neighbor (B -> A)</span>
+    best_b = cp.<span class="fn">argmin</span>(dist_sq, axis=<span class="nb">0</span>)
+
+    <span class="cm"># Mutual check</span>
+    mutual = pass_ratio &amp; (best_b[best_f] == rows)
+    q = cp.<span class="fn">asnumpy</span>(cp.<span class="fn">where</span>(mutual)[<span class="nb">0</span>])
+    t = cp.<span class="fn">asnumpy</span>(best_f[mutual])
+    <span class="kw">return</span> q, t</code></pre>
+
+    <h3>Why Mutual Nearest-Neighbor?</h3>
+    <div class="features">
+        <div class="card">
+            <h3>One-Way Matching</h3>
+            <p>A&rarr;B only. A keypoint in image A finds its best match in B,
+            but that match in B might prefer a <em>different</em> keypoint in A.
+            This produces ~30-40% false matches that poison RANSAC.</p>
+        </div>
+        <div class="card">
+            <h3>Mutual NN Matching</h3>
+            <p>Requires A&rarr;B <strong>and</strong> B&rarr;A to agree.
+            Only keeps matches where both images pick each other as closest.
+            Eliminates most outliers while preserving true matches.</p>
+        </div>
+    </div>
+
+    <h3>RANSAC: From Matches to Geometry</h3>
+    <pre><code><span class="cm"># MAGSAC++ with aggressive settings</span>
+F, mask = cv2.<span class="fn">findFundamentalMat</span>(
+    pts_a, pts_b,
+    cv2.USAC_MAGSAC,
+    ransacReprojThreshold=<span class="nb">2.0</span>,
+    confidence=<span class="nb">0.9999</span>,
+    maxIters=<span class="nb">10000</span>
+)</code></pre>
+</div>
+
+<!-- ============ TAB 5: DSP-SIFT ============ -->
+<div id="dsp" class="tab-content">
+    <h2>DSP-SIFT: Multi-Scale Descriptor Pooling</h2>
+    <p>
+        DSP-SIFT (Dong &amp; Soatto, CVPR 2015) computes descriptors at multiple
+        Gaussian scale radii around each keypoint and averages the histograms.
+        This makes each descriptor an implicit mixture over scales, dramatically
+        improving robustness to scale estimation errors and viewpoint changes &mdash;
+        especially important for wide-baseline stereo in 3D reconstruction and
+        drone aerial imagery with varying altitude.
+    </p>
+
+    <h3>How DSP Pooling Works</h3>
+    <ol>
+        <li>For each keypoint, compute the standard descriptor patch radius <em>r</em></li>
+        <li>Recompute the descriptor at 3 scaled radii: <em>r/&radic;2</em>, <em>r</em>, <em>r&radic;2</em></li>
+        <li>Average the 3 histograms element-wise</li>
+        <li>Apply L2 + clip(0.2) + L2 normalization (then RootSIFT)</li>
+    </ol>
+    <p>
+        The output is still a 128-dimensional descriptor &mdash; same size, better quality.
+        No change to matching code required.
+    </p>
+
+    <h3>Enable DSP-SIFT</h3>
+    <pre><code><span class="cm"># One flag enables DSP pooling</span>
+sift = PySIFT(dsp=<span class="nb">True</span>)
+
+<span class="cm"># Everything else stays the same</span>
+kp, desc = sift.<span class="fn">detectAndCompute</span>(gray, <span class="nb">None</span>)
+<span class="cm"># desc.shape = (N, 128) -- same dimensionality</span></code></pre>
+
+    <h3>Impact on Accuracy</h3>
+    <table>
+        <tr><th>Benchmark</th><th>Standard SIFT</th><th>DSP-SIFT</th><th>Delta</th></tr>
+        <tr><td>IMC Phototourism (inliers)</td><td>245</td><td class="win">303</td><td class="win">+24%</td></tr>
+        <tr><td>MegaDepth AUC@10</td><td>0.457</td><td class="win">0.503</td><td class="win">+4.6pp</td></tr>
+        <tr><td>HPatches MMA@10</td><td>0.695</td><td class="win">0.703</td><td class="win">+0.8pp</td></tr>
+    </table>
+
+    <div class="tip">
+        <strong>When to use DSP:</strong> Always enable for matching tasks
+        (image retrieval, SfM, visual localization). The overhead is small (&lt;10% slower)
+        and the accuracy gain is consistent across benchmarks.
+        Skip only if you need maximum detection speed and matching quality is not critical.
+    </div>
+
+    <h3>GPU Implementation</h3>
+    <p>
+        PySIFT fuses all DSP scales into a single CUDA kernel launch per octave.
+        Each thread block processes one keypoint, looping over the 3 scale multipliers
+        and accumulating into shared memory. This avoids the naive approach of
+        launching 3 separate descriptor kernels (3x overhead).
+    </p>
+</div>
+
+<!-- ============ TAB 6: USE CASES ============ -->
+<div id="usecases" class="tab-content">
+    <h2>Who is PySIFT For?</h2>
+    <p>
+        Every vision pipeline that matches images &mdash; from surgical navigation to autonomous flight &mdash;
+        starts with feature extraction. PySIFT replaces the CPU bottleneck at the foundation of these
+        pipelines with a GPU-resident alternative that requires no retraining, no C++ compilation,
+        and no domain-specific tuning.
+    </p>
+
+    <div class="usecase-grid">
+        <div class="usecase-card">
+            <div class="icon">&#x1F3E5;</div>
+            <h3>Medical Imaging</h3>
+            <p>
+                Register histopathology whole-slide images, align retinal fundus scans,
+                fuse multi-modal MRI/CT volumes. SIFT's physics-based scale-space is
+                domain-agnostic &mdash; no retraining needed on medical data, unlike
+                learned detectors (SuperPoint) trained on street-level photos.
+            </p>
+            <pre><code><span class="cm"># Register two histopathology slide regions</span>
+<span class="kw">from</span> pysift <span class="kw">import</span> PySIFT
+sift = PySIFT(dsp=<span class="nb">True</span>)
+kp1, d1 = sift.<span class="fn">detectAndCompute</span>(slide_a)
+kp2, d2 = sift.<span class="fn">detectAndCompute</span>(slide_b)</code></pre>
+            <div class="keywords">medical image registration &middot; histopathology &middot; retinal alignment &middot; multi-modal fusion</div>
+        </div>
+
+        <div class="usecase-card">
+            <div class="icon">&#x1F681;</div>
+            <h3>Drone / UAV Stitching</h3>
+            <p>
+                Real-time aerial mosaic construction on edge GPUs. PySIFT runs on 4 GB VRAM
+                (Jetson Orin compatible), handles altitude-varying scale changes via
+                DSP-SIFT pooling, and produces deterministic output for certifiable flight systems.
+            </p>
+            <pre><code><span class="cm"># Stitch two aerial frames on Jetson</span>
+<span class="kw">from</span> pysift <span class="kw">import</span> GPUPyStitch
+stitcher = GPUPyStitch()
+panorama = stitcher.<span class="fn">stitch</span>(frame_left, frame_right)</code></pre>
+            <div class="keywords">drone image stitching &middot; UAV mosaic &middot; aerial survey &middot; edge GPU &middot; Jetson</div>
+        </div>
+
+        <div class="usecase-card">
+            <div class="icon">&#x1F916;</div>
+            <h3>SLAM &amp; Visual Odometry</h3>
+            <p>
+                GPU-resident features feed directly into visual odometry without PCIe stall.
+                Zero-copy DLPack handoff means PySIFT descriptors are immediately available
+                to PyTorch-based pose estimators, loop closure detectors, and map optimizers.
+            </p>
+            <pre><code><span class="cm"># GPU-resident features for VO pipeline</span>
+kp, desc = sift.<span class="fn">detectAndCompute</span>(
+    frame, <span class="nb">None</span>, gpu_output=<span class="nb">True</span>
+)
+<span class="cm"># desc is CuPy array in VRAM -- zero-copy</span>
+torch_desc = torch.<span class="fn">from_dlpack</span>(desc)</code></pre>
+            <div class="keywords">visual SLAM &middot; visual odometry &middot; loop closure &middot; pose estimation &middot; real-time localization</div>
+        </div>
+
+        <div class="usecase-card">
+            <div class="icon">&#x1F9BE;</div>
+            <h3>Robotics</h3>
+            <p>
+                Pick-and-place object localization, bin picking, visual servoing.
+                Deterministic output means identical features on identical input &mdash;
+                repeatable grasps, auditable decisions, and regression-testable perception stacks.
+            </p>
+            <div class="keywords">robotic vision &middot; bin picking &middot; visual servoing &middot; object localization &middot; deterministic perception</div>
+        </div>
+
+        <div class="usecase-card">
+            <div class="icon">&#x1F3D7;</div>
+            <h3>3D Reconstruction (NeRF / 3DGS / SfM)</h3>
+            <p>
+                Every NeRF and 3D Gaussian Splatting pipeline starts with COLMAP, which uses CPU SIFT.
+                PySIFT is a drop-in replacement that eliminates the COLMAP preprocessing bottleneck.
+                GPU-resident features flow directly into bundle adjustment without PCIe transfers.
+            </p>
+            <pre><code><span class="cm"># Replace COLMAP's CPU SIFT extraction</span>
+sift = PySIFT(dsp=<span class="nb">True</span>)
+<span class="kw">for</span> img <span class="kw">in</span> scene_images:
+    kp, desc = sift.<span class="fn">detectAndCompute</span>(
+        img, <span class="nb">None</span>, gpu_output=<span class="nb">True</span>
+    )</code></pre>
+            <div class="keywords">NeRF preprocessing &middot; 3D Gaussian Splatting &middot; COLMAP GPU &middot; Structure from Motion &middot; bundle adjustment</div>
+        </div>
+
+        <div class="usecase-card">
+            <div class="icon">&#x1F6F0;</div>
+            <h3>Satellite &amp; Remote Sensing</h3>
+            <p>
+                Gigapixel mosaics from satellite strips. PySIFT's speed advantage grows
+                with resolution (3.2x faster at 4K, expected 4-5x at 8K). No retraining
+                needed &mdash; SIFT's scale-space theory is inherently domain-agnostic,
+                working on any spectral band.
+            </p>
+            <div class="keywords">satellite image matching &middot; remote sensing registration &middot; gigapixel mosaic &middot; multi-spectral alignment</div>
+        </div>
+    </div>
+
+    <h2>Why PySIFT Over Learned Detectors for Downstream Pipelines?</h2>
+    <table>
+        <tr><th>Property</th><th>PySIFT (Classical GPU SIFT)</th><th>SuperPoint / Learned</th></tr>
+        <tr><td>Domain transfer</td><td class="win">Works on any imagery (medical, satellite, microscopy)</td><td>Trained on MS-COCO street photos &mdash; degrades out-of-domain</td></tr>
+        <tr><td>Determinism</td><td class="win">Bitwise identical across runs</td><td>GPU float non-determinism</td></tr>
+        <tr><td>Scale invariance</td><td class="win">True multi-scale via DoG pyramid</td><td>Single 8x grid, no scale-space</td></tr>
+        <tr><td>Model weights</td><td class="win">0 MB (physics-based)</td><td>614 MB (SuperPoint)</td></tr>
+        <tr><td>Certifiability</td><td class="win">Deterministic + inspectable = auditable</td><td>Black box</td></tr>
+        <tr><td>4GB GPU support</td><td class="win">Yes (tested on RTX 3050)</td><td>Tight on 4GB with large images</td></tr>
+    </table>
+</div>
+
+<!-- ============ TAB 7: TRY IT ============ -->
+<div id="tryit" class="tab-content">
+    <h2>Try PySIFT</h2>
+
+    <div class="features">
+        <div class="card">
+            <h3>Kaggle (Free GPU)</h3>
+            <p>
+                Run PySIFT on a free T4 GPU. Our competition notebook processes
+                4,941 image pairs in ~30 minutes.
+            </p>
+            <p>
+                <a href="https://www.kaggle.com/competitions/imc-2026-warm-up-landmark-matching-sprint"
+                   target="_blank" rel="noopener" style="color:var(--kaggle);font-weight:600">
+                    Open Competition Notebook &rarr;
+                </a>
+            </p>
+        </div>
+        <div class="card">
+            <h3>Local Install</h3>
+            <p>
+                Requires NVIDIA GPU with CUDA 12.x.
+                Tested on RTX 3050 (4GB), RTX 4090 (24GB), Tesla T4 (16GB).
+            </p>
+            <pre><code>pip install staysift</code></pre>
+        </div>
+    </div>
+
+    <h3>Full Pipeline Example</h3>
+    <pre><code><span class="kw">from</span> pysift <span class="kw">import</span> PySIFT
+<span class="kw">import</span> cv2
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># 1. Detect with DSP-SIFT</span>
+sift = PySIFT(dsp=<span class="nb">True</span>)
+img_a = cv2.<span class="fn">imread</span>(<span class="st">"scene_left.jpg"</span>, cv2.IMREAD_GRAYSCALE)
+img_b = cv2.<span class="fn">imread</span>(<span class="st">"scene_right.jpg"</span>, cv2.IMREAD_GRAYSCALE)
+
+kp_a, desc_a = sift.<span class="fn">detectAndCompute</span>(img_a, <span class="nb">None</span>)
+kp_b, desc_b = sift.<span class="fn">detectAndCompute</span>(img_b, <span class="nb">None</span>)
+
+<span class="cm"># 2. Match with ratio test</span>
+bf = cv2.<span class="fn">BFMatcher</span>(cv2.NORM_L2)
+matches = bf.<span class="fn">knnMatch</span>(desc_a, desc_b, k=<span class="nb">2</span>)
+good = [m <span class="kw">for</span> m, n <span class="kw">in</span> matches <span class="kw">if</span> m.distance &lt; <span class="nb">0.85</span> * n.distance]
+
+<span class="cm"># 3. Estimate fundamental matrix</span>
+pts_a = np.<span class="fn">float32</span>([kp_a[m.queryIdx].pt <span class="kw">for</span> m <span class="kw">in</span> good])
+pts_b = np.<span class="fn">float32</span>([kp_b[m.trainIdx].pt <span class="kw">for</span> m <span class="kw">in</span> good])
+
+F, mask = cv2.<span class="fn">findFundamentalMat</span>(
+    pts_a, pts_b, cv2.USAC_MAGSAC, <span class="nb">2.0</span>, <span class="nb">0.9999</span>, <span class="nb">10000</span>
+)
+inliers = mask.ravel().sum()
+<span class="fn">print</span>(<span class="st">f"Matches: </span>{len(good)}<span class="st">, Inliers: </span>{inliers}<span class="st">"</span>)</code></pre>
+
+    <h3>Advanced: GPU-Resident Pipeline</h3>
+    <pre><code><span class="kw">import</span> cupy <span class="kw">as</span> cp
+
+<span class="cm"># Detect -- descriptors stay in VRAM</span>
+kp_a, desc_a = sift.<span class="fn">detectAndCompute</span>(img_a, <span class="nb">None</span>, gpu_output=<span class="nb">True</span>)
+kp_b, desc_b = sift.<span class="fn">detectAndCompute</span>(img_b, <span class="nb">None</span>, gpu_output=<span class="nb">True</span>)
+
+<span class="cm"># Match -- GPU matmul, zero PCIe transfer</span>
+q, t = <span class="fn">gpu_bf_match_mutual</span>(desc_a, desc_b, ratio=<span class="nb">0.85</span>)
+
+<span class="cm"># Only small coordinate arrays transfer to CPU for RANSAC</span>
+pts_a = cp.<span class="fn">asnumpy</span>(kp_a[q, :<span class="nb">2</span>])
+pts_b = cp.<span class="fn">asnumpy</span>(kp_b[t, :<span class="nb">2</span>])</code></pre>
+
+    <h2>Resources</h2>
+    <table>
+        <tr><th>Resource</th><th>Link</th></tr>
+        <tr>
+            <td>arXiv Paper</td>
+            <td><a href="https://arxiv.org/abs/2605.17869" target="_blank" rel="noopener">arxiv.org/abs/2605.17869</a></td>
+        </tr>
+        <tr>
+            <td>GitHub Repository</td>
+            <td><a href="https://github.com/SivaIITM/PySIFT" target="_blank" rel="noopener">github.com/SivaIITM/PySIFT</a></td>
+        </tr>
+        <tr>
+            <td>PyPI Package</td>
+            <td><a href="https://pypi.org/project/staysift/" target="_blank" rel="noopener">pypi.org/project/staysift</a></td>
+        </tr>
+        <tr>
+            <td>Documentation</td>
+            <td><a href="https://pysift.readthedocs.io/" target="_blank" rel="noopener">pysift.readthedocs.io</a></td>
+        </tr>
+        <tr>
+            <td>Kaggle Competition</td>
+            <td><a href="https://www.kaggle.com/competitions/imc-2026-warm-up-landmark-matching-sprint" target="_blank" rel="noopener">IMC 2026 Warm-Up Sprint</a></td>
+        </tr>
+        <tr>
+            <td>HuggingFace Space</td>
+            <td><a href="https://huggingface.co/spaces/sivaIITM/PySIFT" target="_blank" rel="noopener">PySIFT Interactive Demo</a></td>
+        </tr>
+    </table>
+
+    <div class="warn">
+        <strong>GPU required:</strong> PySIFT needs an NVIDIA GPU with CUDA 11.x or 12.x.
+        For CPU-only environments, use Kaggle (free T4 GPU) or Google Colab.
+        <code>pip install staysift</code> on a CPU-only machine will install but
+        fail at runtime.
+    </div>
+</div>
+
+<!-- ============ FOOTER ============ -->
+<div class="footer">
+    <p>
+        <strong>PySIFT</strong> &mdash; GPU-Resident Deterministic SIFT for Computer Vision<br>
+        Sivakumar K.S., IIT Madras &mdash;
+        <a href="https://arxiv.org/abs/2605.17869">arXiv:2605.17869</a>
+    </p>
+    <div class="links">
+        <a href="https://github.com/SivaIITM/PySIFT">GitHub</a>
+        <a href="https://pypi.org/project/staysift/">PyPI</a>
+        <a href="https://pysift.readthedocs.io/">Docs</a>
+        <a href="https://huggingface.co/spaces/sivaIITM/PySIFT">HF Space</a>
+        <a href="https://www.kaggle.com/competitions/imc-2026-warm-up-landmark-matching-sprint">Kaggle</a>
+    </div>
+</div>
+
+<!-- ============ TAB JS ============ -->
+<script>
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+});
+</script>
+</body>
+</html>

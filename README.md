@@ -10,8 +10,10 @@
 [![Kaggle](https://img.shields.io/badge/Kaggle-Tutorial-20BEFF.svg)](https://www.kaggle.com/code/sivakumarksce24d040/pysift-tutorial)
 [![Kaggle](https://img.shields.io/badge/Kaggle-Determinism-20BEFF.svg)](https://www.kaggle.com/code/sivakumarksce24d040/pysift-determinism)
 [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-orange)](https://huggingface.co/spaces/sivaIITM/PySIFT)
+[![Documentation](https://readthedocs.org/projects/pysift/badge/?version=latest)](https://pysift.readthedocs.io/en/latest/)
+[![Tutorial](https://img.shields.io/badge/Tutorial-GitHub%20Pages-27ae60)](https://sivaiitm.github.io/PySIFT/)
 
-A pure-Python, GPU-resident SIFT implementation that matches OpenCV SIFT accuracy while running **26% faster end-to-end** with **4x matching speedup**. Zero-copy DLPack interop keeps tensors on the GPU across the full pipeline -- no PCIe round-trips,cross device deterministic
+**PySIFT** is a pure-Python, open-source GPU-resident implementation of the Scale-Invariant Feature Transform (SIFT) built on CuPy and Numba CUDA kernels which is faster and yet more accurate. It runs the entire detection-to-descriptor pipeline on your NVIDIA GPU with zero-copy DLPack interop to PyTorch so that your downstream DL steps will be free from CPU PCIe bottlenecks.
 
 ## Architecture
 
@@ -165,6 +167,25 @@ See [`config.yaml`](config.yaml) for all parameters and presets.
 | kornia | >= 0.7 | *Optional:* HardNet, HyNet, OriNet |
 | timm | >= 0.9 | *Optional:* MiDaS depth estimation |
 | PyYAML | any | *Optional:* config file support |
+
+## Who is PySIFT For?
+
+- **Medical imaging** -- Register histopathology slides, align retinal scans. No retraining needed. Deterministic output for regulatory compliance.
+- **Drone / UAV** -- Real-time aerial stitching on 4 GB GPUs (Jetson Orin compatible). DSP-SIFT handles altitude-varying scale changes.
+- **SLAM & robotics** -- GPU-resident features with zero-copy DLPack handoff to your visual odometry pipeline. Deterministic = repeatable grasps.
+- **3D reconstruction** -- Drop-in replacement for COLMAP's CPU SIFT. GPU-resident features for NeRF / 3DGS / SfM preprocessing.
+- **Satellite & remote sensing** -- Gigapixel mosaics. Speed advantage grows with resolution (3.2x faster at 4K). Domain-agnostic across spectral bands.
+
+## Resources
+
+| Resource | Link |
+|----------|------|
+| arXiv Paper | [arxiv.org/abs/2605.17869](https://arxiv.org/abs/2605.17869) |
+| Documentation | [pysift.readthedocs.io](https://pysift.readthedocs.io/) |
+| Interactive Tutorial | [sivaiitm.github.io/PySIFT](https://sivaiitm.github.io/PySIFT/) |
+| HuggingFace Space | [huggingface.co/spaces/sivaIITM/PySIFT](https://huggingface.co/spaces/sivaIITM/PySIFT) |
+| Kaggle Competition | [IMC 2026 Warm-Up Sprint](https://www.kaggle.com/competitions/imc-2026-warm-up-landmark-matching-sprint) |
+| PyPI Package | [pypi.org/project/staysift](https://pypi.org/project/staysift/) |
 
 ## Citation
 
