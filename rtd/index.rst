@@ -1,3 +1,6 @@
+.. meta::
+   :google-site-verification: KfdRtDSRxwba3xj-NR7yzKOAylRaYZrmAxdl7LHABNM
+
 PySIFT -- GPU-Resident SIFT for Computer Vision
 =================================================
 
