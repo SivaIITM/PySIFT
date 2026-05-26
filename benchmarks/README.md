@@ -1,4 +1,4 @@
-# Benchmark Results
+# Benchmark Results of PySIFT
 
 Raw benchmark data backing **Table 3** (Ablation) and **Table 2** (Cross-dataset) in the paper.
 
