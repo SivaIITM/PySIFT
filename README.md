@@ -10,7 +10,7 @@
 [![Kaggle](https://img.shields.io/badge/Kaggle-Tutorial-20BEFF.svg)](https://www.kaggle.com/code/sivakumarksce24d040/pysift-tutorial)
 [![Kaggle](https://img.shields.io/badge/Kaggle-Determinism-20BEFF.svg)](https://www.kaggle.com/code/sivakumarksce24d040/pysift-determinism)
 [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-orange)](https://huggingface.co/spaces/sivaIITM/PySIFT)
-[![Documentation](https://readthedocs.org/projects/pysift/badge/?version=latest)](https://pysift.readthedocs.io/en/latest/)
+[![Documentation](https://readthedocs.org/projects/pysift-gpu/badge/?version=latest)](https://pysift-gpu.readthedocs.io/en/latest/)
 [![Tutorial](https://img.shields.io/badge/Tutorial-GitHub%20Pages-27ae60)](https://sivaiitm.github.io/PySIFT/)
 
 **PySIFT** is a pure-Python, open-source GPU-resident implementation of the Scale-Invariant Feature Transform (SIFT) built on CuPy and Numba CUDA kernels which is faster and yet more accurate. It runs the entire detection-to-descriptor pipeline on your NVIDIA GPU with zero-copy DLPack interop to PyTorch so that your downstream DL steps will be free from CPU PCIe bottlenecks.
@@ -181,7 +181,7 @@ See [`config.yaml`](config.yaml) for all parameters and presets.
 | Resource | Link |
 |----------|------|
 | arXiv Paper | [arxiv.org/abs/2605.17869](https://arxiv.org/abs/2605.17869) |
-| Documentation | [pysift.readthedocs.io](https://pysift.readthedocs.io/) |
+| Documentation | [pysift-gpu.readthedocs.io](https://pysift-gpu.readthedocs.io/) |
 | Interactive Tutorial | [sivaiitm.github.io/PySIFT](https://sivaiitm.github.io/PySIFT/) |
 | HuggingFace Space | [huggingface.co/spaces/sivaIITM/PySIFT](https://huggingface.co/spaces/sivaIITM/PySIFT) |
 | Kaggle Competition | [IMC 2026 Warm-Up Sprint](https://www.kaggle.com/competitions/imc-2026-warm-up-landmark-matching-sprint) |
